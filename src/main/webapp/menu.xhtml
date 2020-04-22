@@ -1,0 +1,31 @@
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+	<h:outputScript name="/js/jquery.maskMoney.min.js"/>
+	
+  <aside class="main-sidebar">
+    <section class="sidebar">
+      	
+	  <h:form prependId="false">
+	   <p:menubar>
+        <p:submenu label="Inicio" icon="pi pi-file">
+             <p:menuitem value="Registro Cosecha" url="listar.xhtml" />
+             <p:menuitem value="Registro Horas" url="horas_trabajadas.xhtml" />
+        </p:submenu>
+         <p:submenu label="Mantenimiento" icon="pi pi-file">
+             <p:menuitem value="Cosecheros" url="cosecheros.xhtml" />
+             <p:menuitem value="Productos" url="productos.xhtml" />
+        </p:submenu>
+        <f:facet name="options">
+                  <p:commandButton  value="Salir" icon="pi pi-home" actionListener="#{cabCosechaController.salir()}" ajax="false" />
+         </f:facet>
+    </p:menubar>
+	  	
+       
+	  </h:form>	
+    </section>
+  </aside>
+	
+</ui:fragment>

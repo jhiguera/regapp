@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:p="http://primefaces.org/ui"	  
+	  xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Registro Usuarios</title>
+</h:head>
+<h:body>
+			<a style="color: #FF0000" href="#{request.contextPath}/login.xhtml">Login</a><br/><br/>
+		<div align="center">
+		<h:form>
+			<p:panel style="vertical-align:middle;height:80px;">
+				<h1 align="center">Registro Usuario</h1>
+			</p:panel>
+			<p:panel>
+            <table>
+                <tr>
+                    <td><p:outputLabel value="Username "/><h:outputLabel value="(*)" style="color:#F00707;" /></td>
+                    <td >
+                        <h:inputText value="#{user.model.username}" required="true" label="Nombre Usuario"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><p:outputLabel value="Password "/><h:outputLabel value="(*)" style="color:#F00707;" /></td>
+                    <td>
+                        <h:inputSecret value="#{user.model.password}" label="Clave" redisplay="true" required="true">
+                            <f:validateLength maximum="100" />
+                        </h:inputSecret>
+                    </td>
+                    <td><p:outputLabel value="Confirmar Clave"/><h:outputLabel value="(*)" style="color:#F00707;" /></td>
+                    <td>
+                        <h:inputSecret value="#{user.model.passwordConfirm}" redisplay="true" label="ConfPassword" required="true">
+                            <f:validateLength maximum="100" />
+                        </h:inputSecret>
+                    </td>
+                    <td>
+                        <p:selectManyMenu value="#{user.model.roles}" label="Roles"
+                           filter="true" filterMatchMode="contains" converter="#{roleConverter}"
+                          showCheckbox="true">
+                              <f:selectItems value="#{user.lstRole}" var="r" itemValue="#{r}" itemLabel="#{r.name}" />
+                        </p:selectManyMenu>
+                    </td>
+                </tr>	
+            </table><br/>
+            <p:commandButton value="Validate" action="#{user.register}" ajax="false"/><p:outputLabel value="&#160;&#160;&#160;&#160;&#160;"/>
+            <p:commandButton type="reset" value="Limpiar"/>
+            <table>
+                <tr>
+                    <td><h:messages id="messages" /></td>
+                </tr>
+            </table>
+            </p:panel>
+    </h:form>	
+    </div>
+</h:body>
+</html>

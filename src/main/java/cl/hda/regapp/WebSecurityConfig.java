@@ -19,16 +19,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
+    
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers("/resources/**", "/registration").permitAll()
+                .antMatchers("/resources/**", "/registration","/h2-console/**/**","/register.xhtml").permitAll()
                 .antMatchers("/javax.faces.resource/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -42,6 +44,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .logoutSuccessUrl("/login.xhtml")
                 .permitAll();
         http.csrf().disable();
+        http.headers().frameOptions().disable();
+
 
     }
 
@@ -52,6 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+       // auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+    	auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
 }

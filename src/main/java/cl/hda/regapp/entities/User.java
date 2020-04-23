@@ -2,12 +2,16 @@ package cl.hda.regapp.entities;
 
 
 import javax.persistence.*;
+
+import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "user")
-public class User {
-    @Id
+public class User implements Serializable {
+    
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -18,7 +22,13 @@ public class User {
     @Transient
     private String passwordConfirm;
 
-    @ManyToMany
+    @ManyToMany(cascade = {
+            CascadeType.MERGE
+        })
+        @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+        )
     private Set<Role> roles;
 
     public Long getId() {
@@ -60,4 +70,28 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User tag = (User) o;
+        return Objects.equals(username, tag.username);
+    }
+ 
+    @Override
+    public int hashCode() {
+        return Objects.hash(username);
+    }
+    
+    @Override
+    public String toString() {
+    	if(id == null)
+			  return null;
+			else
+			   return id.toString();
+    }
+    
+    
+    
 }

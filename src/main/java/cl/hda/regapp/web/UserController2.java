@@ -12,7 +12,7 @@ import cl.hda.regapp.service.UserService;
 import cl.hda.regapp.validator.UserValidator;
 
 @Controller
-public class UserController {
+public class UserController2 {
     @Autowired
     private UserService userService;
 

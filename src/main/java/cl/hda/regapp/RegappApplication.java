@@ -41,7 +41,7 @@ public class RegappApplication {
     public ServletContextInitializer servletContextInitializer() {
         return servletContext -> {
             servletContext.setInitParameter("com.sun.faces.forceLoadConfiguration", Boolean.TRUE.toString());
-            servletContext.setInitParameter("primefaces.THEME", "nova-light");
+           // servletContext.setInitParameter("primefaces.THEME", "nova-light");
             servletContext.setInitParameter("com.sun.faces.numberOfViewsInSession", "5");
 			servletContext.setInitParameter("com.sun.faces.serializeServerState", "false");
 			servletContext.setInitParameter("javax.faces.STATE_SAVING_METHOD", "client");

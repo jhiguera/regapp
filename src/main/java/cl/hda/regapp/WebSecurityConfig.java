@@ -1,5 +1,7 @@
 package cl.hda.regapp;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -9,13 +11,17 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Qualifier("userDetailsServiceImpl")
+    
+	
+	@Qualifier("userDetailsServiceImpl")
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -30,13 +36,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers("/resources/**", "/registration","/h2-console/**/**","/register.xhtml","/Home.xhtml").permitAll()
+                .antMatchers("/resources/**", "/registration","/h2-console/**/**","/register.xhtml").permitAll()
                 .antMatchers("/javax.faces.resource/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
             .formLogin()
                 .loginPage("/login.xhtml")
-                .defaultSuccessUrl("/listar.xhtml", true) 
+                .defaultSuccessUrl("/Home.xhtml", true) 
                 .failureUrl("/login.xhtml?error=true")
                 .permitAll()
                 .and()
@@ -49,6 +55,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
+   
+    
+    
     @Bean
     public AuthenticationManager customAuthenticationManager() throws Exception {
         return authenticationManager();
@@ -56,7 +65,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-       // auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+
     	auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+    	
     }
 }

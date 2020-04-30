@@ -32,12 +32,12 @@
 			
 			<div style="float: right; margin-right: 110px">
 				<span style="float: left; height: 30px; line-height: 30px; margin-right: 60px">
-				Usuario
+				#{homeController.nombre}
 				</span>
 				
 				<h:form style="display: inline-block">
 					<p:menubar styleClass="menu-sistema">
-						<p:menuitem value="Salir" />
+						<p:menuitem value="Salir" action="#{homeController.salir}" />
 					</p:menubar>
 				</h:form>
 			</div>

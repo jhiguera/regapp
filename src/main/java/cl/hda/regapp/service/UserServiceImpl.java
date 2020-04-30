@@ -12,7 +12,8 @@ import java.util.HashSet;
 
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
+    
+	@Autowired
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;

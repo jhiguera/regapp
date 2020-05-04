@@ -24,11 +24,11 @@ public class Producto implements Serializable{
 	@OneToMany(mappedBy="producto" , fetch = FetchType.EAGER, cascade = CascadeType.ALL,  orphanRemoval = true)
 	List<DetAplicacion> detAplicacion;
 	
+	String producto;
 	
 	String caracteristicas;
 	
 	@Column(name="ingrediente_activo")
-	
 	String ingredienteActivo;
 	
 	Integer reingreso;
@@ -39,11 +39,11 @@ public class Producto implements Serializable{
 	@Column(name="color_etiqueta")
 	String colorEtiqueta;
 	
-	@Column(name="mda_ifrac")
-	Integer mdaIfrac;
+	@Column(name="mda_frac")
+	String mdaFrac;
 	
 	@Column(name="mda_irac")
-	Integer mdaIrac;
+	String mdaIrac;
 
 	public Long getId() {
 		return id;
@@ -100,22 +100,31 @@ public class Producto implements Serializable{
 	public void setColorEtiqueta(String colorEtiqueta) {
 		this.colorEtiqueta = colorEtiqueta;
 	}
-
-	public Integer getMdaIfrac() {
-		return mdaIfrac;
+	
+	public String getMdaFrac() {
+		return mdaFrac;
 	}
 
-	public void setMdaIfrac(Integer mdaIfrac) {
-		this.mdaIfrac = mdaIfrac;
+	public void setMdaFrac(String mdaFrac) {
+		this.mdaFrac = mdaFrac;
 	}
 
-	public Integer getMdaIrac() {
+	public String getMdaIrac() {
 		return mdaIrac;
 	}
 
-	public void setMdaIrac(Integer mdaIrac) {
+	public void setMdaIrac(String mdaIrac) {
 		this.mdaIrac = mdaIrac;
 	}
+
+	public String getProducto() {
+		return producto;
+	}
+
+	public void setProducto(String producto) {
+		this.producto = producto;
+	}
+	
 	
 	
 

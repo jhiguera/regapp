@@ -113,4 +113,22 @@ h1 {
 .menu-sistema .ui-icon-triangle-1-s {
     background: url(#{resource['images:seta-para-baixo.png']}) no-repeat;
 }
+
+ .ui-selectonemenu-list,
+    .ui-selectonemenu-panel
+    {
+        max-height:50% !important;
+        overflow: auto;
+    }
+    .ui-selectonemenu-items-wrapper
+    {
+
+        overflow: auto !important;
+    }
+    .ui-selectonemenu-list {
+        height:100px !important;
+        overflow: scroll;
+    }
+
+
 /* Menu sistema fim */

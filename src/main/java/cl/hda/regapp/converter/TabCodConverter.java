@@ -11,20 +11,20 @@ import javax.faces.convert.FacesConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import cl.hda.regapp.entities.Producto;
-import cl.hda.regapp.repository.ProductoRepository;
+import cl.hda.regapp.entities.TabCod;
+import cl.hda.regapp.repository.TabCodRepository;
 
-@FacesConverter(forClass = Producto.class, value="productoConverter")
-@Component("productoConverter")
-public class ProductoConverter implements Converter,Serializable{
+@FacesConverter(forClass = TabCod.class, value="tabCodConvert")
+@Component("tabCodConverter")
+public class TabCodConverter implements Converter,Serializable{
 	
 	@Autowired
-	ProductoRepository productoRepository;
+	TabCodRepository tabCodRepository;
 	
 	@Override
 	public Object getAsObject(FacesContext context, UIComponent component, String value) {
 		
-		Optional<Producto> s = productoRepository.findById(new Long(value));
+		Optional<TabCod> s = tabCodRepository.findById(new Long(value));
 		return s.get();
 
 	}
@@ -33,7 +33,7 @@ public class ProductoConverter implements Converter,Serializable{
 	public String getAsString(FacesContext context, UIComponent component, Object value) {
 		
 		if(value != null) {
-			Producto p = (Producto)value;
+			TabCod p = (TabCod)value;
 			return p.toString();
 			
 		}else {

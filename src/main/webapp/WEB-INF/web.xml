@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<error-page>
+		<exception-type>javax.faces.application.ViewExpiredException</exception-type>
+		<location>/login.xhtml</location>
+</error-page>

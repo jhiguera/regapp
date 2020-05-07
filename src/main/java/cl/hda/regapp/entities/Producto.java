@@ -124,8 +124,11 @@ public class Producto implements Serializable{
 	public void setProducto(String producto) {
 		this.producto = producto;
 	}
-	
-	
+	    
+    @Override
+	public String toString() {
+		return id.toString();
+	}
 	
 
 }

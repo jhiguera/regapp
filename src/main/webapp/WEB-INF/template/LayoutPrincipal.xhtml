@@ -40,6 +40,23 @@
         day: 'Día',
         allDayText: 'Todo el día'
     };
+       
+       $(document).on('pfAjaxError', function(xhr, ajaxObj, error) {
+           
+    	   console.log(xhr);
+           console.log(ajaxObj.responseText);
+           
+           var obj = JSON.parse(ajaxObj.responseText);
+           console.log(obj);
+           switch(obj.status){
+              
+           case 403:
+        	   alert(obj.message);
+               location.reload();
+           }
+           
+       });
+       
 </script>
         
         
@@ -69,7 +86,7 @@
 				
 				<h:form style="display: inline-block">
 					<p:menubar styleClass="menu-sistema">
-						<p:menuitem value="Salir" action="#{homeController.salir}" />
+						<p:menuitem value="Salir" ajax="false" action="#{homeController.salir}" />
 					</p:menubar>
 				</h:form>
 			</div>

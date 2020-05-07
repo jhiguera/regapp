@@ -12,6 +12,7 @@ import org.springframework.web.context.annotation.SessionScope;
 
 import cl.hda.regapp.entities.CabAplicacion;
 import cl.hda.regapp.entities.Sector;
+import cl.hda.regapp.entities.TabCod;
 import cl.hda.regapp.repository.SectorRepository;
 
 @ManagedBean
@@ -24,9 +25,15 @@ public class FormCabController {
 	private Sector sectorSel = new Sector();
 
   
-  CabAplicacion cabApp = new CabAplicacion();
-  List<Sector> sectores = new ArrayList<>();
-
+  CabAplicacion cabApp      = new CabAplicacion();
+  List<Sector> sectores     = new ArrayList<>();
+  List<TabCod> lstObjetivos = new ArrayList<>();
+  List<TabCod> lstMetodos   = new ArrayList<>();
+  List<TabCod> lstMaquinas  = new ArrayList<>();
+  List<TabCod> lstUmedida   = new ArrayList<>();
+  
+  
+  
   
   @PostConstruct
   public void init(){

@@ -46,9 +46,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl("/login.xhtml?error=true")
                 .permitAll()
                 .and()
+                
             .logout()
             .logoutSuccessUrl("/login.xhtml")
-                .permitAll();
+                .permitAll()
+                .and()
+                .exceptionHandling().authenticationEntryPoint(new AjaxAwareAuthenticationEntryPoint("/login.xhtml"));
+                ;
         http.csrf().disable();
         http.headers().frameOptions().disable();
 

@@ -16,7 +16,7 @@ public class Role implements Serializable {
 
     private String name;
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles" ,cascade = CascadeType.REMOVE)
     private Set<User> users;
 
     public Long getId() {
@@ -55,6 +55,8 @@ public class Role implements Serializable {
     public int hashCode() {
         return Objects.hash(name);
     }
+    
+    
     
     @Override
     public String toString() {

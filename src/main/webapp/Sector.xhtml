@@ -1,0 +1,128 @@
+<ui:composition 
+    template="/WEB-INF/template/LayoutPrincipal.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+    <script>
+    $(document).ready(function() {
+        var dialog1 = $('.ui-dialog .ui-dialog-content');
+
+        dialog1.scroll(function() {
+            $('#ui-datepicker-div').hide();
+        });
+    });
+    
+    </script>
+     
+  <ui:define name="titulo">Sectores</ui:define>
+  <ui:define name="corpo">
+  
+    
+<h:form id="form1">
+	    	<h1>Listado Sectores</h1>
+ <p:messages id="messages" showDetail="true" closable="true" showSummary="false">
+        <p:autoUpdate />
+    </p:messages>	    	
+	    	<p:toolbar style="margin-top: 20px">
+	    		<p:toolbarGroup >
+	    		    <p:commandButton value="Grabar" id="botonSalvar" action="#{sec.salvar()}" />
+	    		      <p:commandButton value="Agregar Sector"  icon="pi pi-plus" id="botonDetalleplus" update="sec"
+	    		         process="@this"  action="#{sec.addRow()}" oncomplete="PF('sec').paginator.setPage(PF('sec').paginator.cfg.pageCount - 1);"  />
+	    	 		 
+	    		</p:toolbarGroup>
+	    		
+	    	</p:toolbar>
+          <br/>
+	 	  <p:dataTable id="sec" locale="es" showCurrentPageReport = "true" currentPageReportTemplate="{currentPage} #{loc.of} de {totalPages}" 
+	 	   widgetVar="sec" var="s" value="#{sec.sectorDataModel}" editable="true"  style="margin-bottom:20px" 
+                 paginator="true"   emptyMessage=""
+                 rows="5"
+                 rowKey="#{s.id}"  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                 rowsPerPageTemplate="5,10,15"
+                 >
+        <f:facet name="header">
+            Lista Sectores
+        </f:facet>
+        	<p:ajax event="rowEdit"  oncomplete="$('.ui-row-editor span.ui-icon-pencil').each(function(){$(this).css('visibility','visible')});"/>
+        	<p:ajax event="rowEditCancel" listener="#{sec.onRowCancel}" onstart="$('.ui-row-editor span.ui-icon-pencil').each(function(){$(this).css('visibility','visible')});" />
+            <p:ajax event="rowEditInit" oncomplete="$('.ui-row-editor span.ui-icon-pencil').each(function(){$(this).css('visibility','hidden')});" />
+              
+        <p:column selectionMode="single" style="width:16px;text-align:center"/>                 
+        
+        <p:column headerText="Sector" filterBy="#{s.sector}" filterMatchMode="contains">
+              <p:cellEditor>
+            <f:facet name="output"><h:outputText value="#{s.sector}" /></f:facet>
+             <f:facet name="input"><p:inputText required="true" inputStyle="text-align: right" value="#{s.sector}" style="width:100%" label="Sector"/></f:facet>
+            </p:cellEditor>
+        </p:column>
+           
+        <p:column headerText="Parcela" >
+              <p:cellEditor>
+            <f:facet name="output"><h:outputText value="#{s.parcela}" /></f:facet>
+             <f:facet name="input"><p:inputText required="true" inputStyle="text-align: right" value="#{s.parcela}" style="width:100%" label="Parcela"/></f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+         <p:column headerText="Cuartelero"  filterMatchMode="contains">
+              <p:cellEditor>
+            <f:facet name="output"><h:outputText value="#{s.cuartelero}" /></f:facet>
+             <f:facet name="input"><p:inputText  inputStyle="text-align: right" value="#{s.cuartelero}" style="width:100%" label="Cuartelero"/></f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+        <p:column headerText="Superficie Real" >
+              <p:cellEditor>
+            <f:facet name="output"><h:outputText value="#{s.superficieReal}" /></f:facet>
+             <f:facet name="input"><p:inputText required="true" inputStyle="text-align: right" value="#{s.superficieReal}" style="width:100%" label="Superficie Real">
+               <p:keyFilter mask="num"></p:keyFilter>
+               </p:inputText>
+             </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+         <p:column headerText="Especies">
+              <p:cellEditor>
+           		 <f:facet name="output"><h:outputText value="#{s.especie}" /></f:facet>
+             	<f:facet name="input"><p:inputText required="true" inputStyle="text-align: right" value="#{s.especie}" style="width:100%" label="Especie"/></f:facet>
+             </p:cellEditor>
+        </p:column>
+        
+        <p:column headerText="Variedad Copa">
+              <p:cellEditor>
+           		 <f:facet name="output"><h:outputText value="#{s.variedad}" /></f:facet>
+             	<f:facet name="input"><p:inputText required="true" inputStyle="text-align: right" value="#{s.variedad}" style="width:100%" label="Variedad Copa"/></f:facet>
+             </p:cellEditor>
+        </p:column>
+        
+        <p:column headerText="Variedad PortaInjecto">
+              <p:cellEditor>
+           		 <f:facet name="output"><h:outputText value="#{s.portainjerto}" /></f:facet>
+             	<f:facet name="input"><p:inputText required="true" inputStyle="text-align: right" value="#{s.portainjerto}" style="width:100%" label="Variedad Porta Injerto"/></f:facet>
+             </p:cellEditor>
+        </p:column>
+        
+       <p:column headerText="Plantas Reales">
+              <p:cellEditor>
+           		 <f:facet name="output"><h:outputText value="#{s.plantasReales}" /></f:facet>
+             	<f:facet name="input"><p:inputText required="true" inputStyle="text-align: right" value="#{s.plantasReales}" style="width:100%" label="Plantas Reales">
+             	     <p:keyFilter mask="int"></p:keyFilter>
+             	     </p:inputText>
+              	</f:facet>
+             </p:cellEditor>
+         </p:column>
+      <p:column style="width:32px">
+             <p:rowEditor>
+              </p:rowEditor>
+        </p:column>
+        
+        
+        
+        
+     </p:dataTable> 
+        
+     
+   </h:form>
+  </ui:define>
+</ui:composition>

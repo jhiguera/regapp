@@ -20,13 +20,13 @@
 	  <converter-class>cl.piemonte.cosecha.Cosecha.controller.SectorConverter</converter-class>
 	  
    </converter>
-   -->
-   <!--  
+   
+   
    <application>
         <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
     
    </application>
    -->
    
-    
+   
 </faces-config>

@@ -1,0 +1,169 @@
+<ui:composition 
+    template="/WEB-INF/template/LayoutPrincipal.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+    <script>
+    $(document).ready(function() {
+        var dialog1 = $('.ui-dialog .ui-dialog-content');
+
+        dialog1.scroll(function() {
+            $('#ui-datepicker-div').hide();
+        });
+    });
+    
+    </script>
+     
+  <ui:define name="titulo">Listado</ui:define>
+  <ui:define name="corpo">
+  
+    
+<h:form id="form1">
+	    	<h1>Listado Registros</h1>
+ <p:messages id="messages" showDetail="true" closable="true" showSummary="false">
+        <p:autoUpdate />
+    </p:messages>
+      <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+    </p:confirmDialog>   
+    	    	
+	    	<p:toolbar style="margin-top: 20px">
+	    		<p:toolbarGroup >
+	    		    <p:commandButton value="Modificar" id="botonSalvar" action="#{listarCab.modificar()}" />
+	    		    <p:commandButton value="Eliminar" process="@form" id="botonEliminar" update="detCab" action="#{listarCab.eliminar()}" >
+	    		           <p:confirm header="Confirmacion" message="Seguro de borrar este registro?" icon="pi pi-exclamation-triangle" />
+	    		    </p:commandButton>
+	    		    <p:commandButton value="Ver"  id="botonDetalle" action="#{listarCab.ver()}" update="dlgDetalle" oncomplete="PF('dlgDetalle').show()" />
+	    		    <p:commandButton value="Exportar" ajax="false"  id="botonExportar" action="#{listarCab.export2Excel()}" />
+	    		    
+	    		</p:toolbarGroup>
+	    		<p:toolbarGroup align="right">
+	    			<p:commandButton value="Nuevo" action="#{listarCab.nuevo()}" />
+	    		</p:toolbarGroup>
+	    	</p:toolbar>
+          <br/>
+	 	  <p:dataTable id="detCab" widgetVar="cab1" var="cab1" value="#{listarCab.cabAplicacionDataModel}"  style="margin-bottom:20px" 
+                 paginator="true" paginatorAlwaysVisible="false" emptyMessage="No hay registros"
+                 rowKey="#{cab1.id}" selection="#{listarCab.cabAplicacion}" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                 rowsPerPageTemplate="5,10,15"
+                 >
+                 
+               <p:ajax event="rowSelect"/> 
+               <p:ajax event="rowUnselect"  />  
+                    
+                  
+        <f:facet name="header">
+            Cabeceras
+        </f:facet>
+       <!--  
+        <p:ajax event="rowEdit" listener="#{formCab.onRowEdit}" oncomplete="$('.ui-row-editor span.ui-icon-pencil').each(function(){$(this).css('visibility','visible')});"/>
+        <p:ajax event="rowEditCancel" listener="#{formCab.onRowCancel}" onstart="$('.ui-row-editor span.ui-icon-pencil').each(function(){$(this).css('visibility','visible')});" />
+        <p:ajax event="rowEditInit" oncomplete="$('.ui-row-editor span.ui-icon-pencil').each(function(){$(this).css('visibility','hidden')});" />
+        -->
+         <p:ajax event="rowEdit" listener="#{formCab.onRowEdit}" oncomplete="$('.ui-row-editor span.ui-icon-pencil').each(function(){$(this).css('visibility','visible')});"/>
+        <p:ajax event="rowEditCancel" listener="#{formCab.onRowCancel}" onstart="$('.ui-row-editor span.ui-icon-pencil').each(function(){$(this).css('visibility','visible')});" />
+        <p:ajax event="rowEditInit" oncomplete="$('.ui-row-editor span.ui-icon-pencil').each(function(){$(this).css('visibility','hidden')});" />
+        
+        
+        <p:column  selectionMode="single">
+            
+        </p:column>
+        
+        <p:column headerText="Nro Orden" filterBy="#{cab1.nroOrden}">
+              <h:outputText value="#{cab1.nroOrden}" style="text-align:right" />
+        </p:column>
+        <p:column headerText="Fecha" style="text-align:center">
+              <h:outputText value="#{cab1.fecha}" >
+                   <f:convertDateTime pattern="dd.MM.yyyy" />
+              </h:outputText>
+        </p:column>
+        <p:column headerText="Sector" style="text-align:center" filterBy="#{cab1.sector.sector}">
+              <h:outputText value="#{cab1.sector.sector}" />
+        </p:column>
+        <p:column headerText="Parcela" style="text-align:center" filterBy="#{cab1.sector.parcela}">
+              <h:outputText value="#{cab1.sector.parcela}" />
+        </p:column>
+        
+        
+        
+           
+        <p:column headerText="Inicio" style="text-align:center">
+               <h:outputText value="#{cab1.horaInicio}" converter="#{localDateTimeConverter}"></h:outputText>
+            </p:column>
+            <p:column headerText="Termino" style="text-align:center">
+               <h:outputText value="#{cab1.horaTermino}" converter="#{localDateTimeConverter}">  </h:outputText>
+           </p:column>
+             <p:column headerText="Metodo Aplicacion" style="text-align:center">
+	              <h:outputText value="#{cab1.metodo}" />
+	         </p:column>
+	         <p:column headerText="Mojamiento Total" style="text-align:right">
+	             <h:outputText value="#{cab1.mojamiento}" />
+	         </p:column>
+	         <p:column headerText="UM Mojamiento" style="text-align:center">
+	            <h:outputText value="#{cab1.umMojamiento}" />
+	         </p:column>
+	         <p:column headerText="Aplicador(es)" style="text-align:center">
+	            <h:outputText value="#{cab1.aplicadores}" />
+	         </p:column>
+	         <p:column headerText="Maquina Utilizada" style="text-align:center">
+	             <h:outputText value="#{cab1.maquina}" />
+	         </p:column>
+        
+        
+        
+        
+                
+        </p:dataTable> 
+        
+     <p:dialog header="Detalle Registro Aplicaciones" widgetVar="dlgDetalle" id="dlgDetalle" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="100%">
+        <p:outputPanel id="multiCarDetail" >
+        <p:dataTable id="detalle" widgetVar="det1" var="det1" value="#{listarCab.cabAplicacion.detAplicacion}" style="margin-bottom:20px">
+            <f:facet name="header">Detalle</f:facet>
+	       
+	     
+           <p:column headerText="Producto" style="text-align:center;" >
+               <h:outputText value="#{det1.producto.producto}" />
+        </p:column>
+	        <p:column headerText="Dosis" width="5%" style="text-align:right;" >
+	               <h:outputText value="#{det1.dosis}" />
+	        </p:column>
+	        <p:column headerText="UM Dosis" width="5%" style="text-align:center;" >
+	               <h:outputText value="#{det1.umDosis}" />
+	        </p:column>
+	        <p:column headerText="Objetivo" style="text-align:center;">
+	             <h:outputText value="#{det1.objetivo}" />
+	        </p:column>
+	      
+	        <p:column headerText="Carencia" width="5%" style="text-align:right;">
+	              <h:outputText value="#{det1.carencia}" />
+	        </p:column>
+	       
+	         <p:column headerText="Gasto Producto Total" style="text-align:right;">
+	             <h:outputText value="#{det1.gastoTotal}">
+	                <f:convertNumber maxFractionDigits="2" groupingUsed="false" />
+	             </h:outputText>
+	         </p:column>
+	         <p:column headerText="Mojamiento Real" style="text-align:right;">
+	             <h:outputText escape="false" value="#{det1.mojamientoReal}" >
+	                 <f:convertNumber maxFractionDigits="2" groupingUsed="false" />
+	                
+	             </h:outputText>
+	         </p:column>
+	         <p:column headerText="Unidad Medida" width="5%" style="text-align:center;">
+	              <h:outputText value="#{det1.cabAplicacion.umMojamiento}" />
+	        </p:column>
+	         <p:column headerText="Fecha Viable Cosecha" style="text-align:center">
+	             <h:outputText value="#{det1.fechaViableCosecha}">
+	             <f:convertDateTime pattern="dd.MM.yyyy" />
+	             </h:outputText>
+	         </p:column>
+	     
+      </p:dataTable>           
+   </p:outputPanel>
+    </p:dialog>    
+   </h:form>
+  </ui:define>
+</ui:composition>

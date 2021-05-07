@@ -4,6 +4,9 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:sec="http://www.sprinfgramework.org/security/tags"
+      
+      
       xmlns:p="http://primefaces.org/ui">
 
 	<h:head>
@@ -81,17 +84,46 @@
 			
 			<div style="float: right; margin-right: 110px">
 				<span style="float: left; height: 30px; line-height: 30px; margin-right: 60px">
-				#{homeController.nombre}
+				usuario: #{homeController.nombre}
 				</span>
 				
+				
 				<h:form style="display: inline-block">
-					<p:menubar styleClass="menu-sistema">
+		
+					<p:menubar styleClass="menu-sistema" >
+					<p:submenu label="Inicio" icon="pi pi-file">
+			             <p:menuitem value="Ingreso Aplicaciones" url="ListarCab.xhtml" />
+			             
+			        </p:submenu>
+			        
+			         <p:submenu label="Mantenimiento" icon="pi pi-file" rendered="#{homeController.isAdmin}">
+			             <p:menuitem value="Sectores" url="Sector.xhtml" />
+			             <p:menuitem value="Productos" url="Producto.xhtml" />
+			              <p:menuitem value="Otros parametros" url="Tabcod.xhtml" />
+			        </p:submenu>
+					
+						
+						
 						<p:menuitem value="Salir" ajax="false" action="#{homeController.salir}" />
 					</p:menubar>
 				</h:form>
 			</div>
 			<div style="clear: both"></div>
 		</header>
+        <p:idleMonitor onidle="PF('sessionTimeOutDialog').show()" onactive="PF('sessionTimeOutDialog').show()" timeout="#{session.maxInactiveInterval*  1000}"  >
+			
+			 <p:ajax event="idle" listener="#{homeController.onIdle}"  />
+             <p:ajax event="active" listener="#{homeController.onActive}"  />
+         </p:idleMonitor>
+			
+			<p:dialog header="Sesion Caducada" widgetVar="sessionTimeOutDialog" 
+			 modal="true" fixedCenter="true" closable="false" width="400" visible="false">
+			     <h:outputText value="Sesion" />
+			     <input id="confirmBackToLogin" type="button" value="Volver #{session.maxInactiveInterval}"
+			        onclick="window.location='#{facesContext.externalContext.requestContextPath}/login.xhtml';" />
+		</p:dialog>
+	
+    
 
 		<div id="conteudo">
 			<ui:insert name="corpo"/>

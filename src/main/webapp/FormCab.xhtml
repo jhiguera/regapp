@@ -1,106 +1,223 @@
-<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition  
+    template="/WEB-INF/template/LayoutPrincipal.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui">
+    <script>
+    $(document).ready(function() {
+        var dialog1 = $('.ui-dialog .ui-dialog-content');
 
+        dialog1.scroll(function() {
+            $('#ui-datepicker-div').hide();
+        });
+    });
     
-    	<h:form>
-	    	<h1>Nuevo Registro</h1>
-	    	
+    </script>
+<ui:define name="titulo">Listado</ui:define>
+<ui:define name="corpo">
+
+<h:form id="form" autocomplete="off">
+	    	<h1><h:outputText value="#{formCab.titulo}"></h:outputText></h1>
+ <p:messages id="messages" showDetail="true" closable="true" showSummary="false">
+        <p:autoUpdate />
+  </p:messages>	    	
 	    	<p:toolbar style="margin-top: 20px">
 	    		<p:toolbarGroup >
-	    		    <p:commandButton value="Grabar" id="botonSalvar"/>
-	    		    <p:commandButton value="Detalle"  icon="pi pi-plus" id="botonDetalleplus"/>
+	    		    <p:commandButton value="Grabar" id="botonSalvar" action="#{formCab.salvar()}" />
+	    		    <p:commandButton process="@this"  value="Cancelar" id="botonCancelar"  action="#{formCab.cancelar()}" update="det1" />
+	    		    <p:commandButton value="Detalle"  icon="pi pi-plus" id="botonDetalleplus" process="@this"  action="#{formCab.addRow()}" oncomplete="PF('det1').addRow();"/>
 	    		</p:toolbarGroup>
 	    		<p:toolbarGroup align="right">
 	    			<p:button value="Listar" outcome="/ListarCab" />
 	    		</p:toolbarGroup>
 	    	</p:toolbar>
 	    	
-	    	<p:panelGrid columns="2" id="painel" style="width: 100%; margin-top: 20px"
+	    	<p:panelGrid columns="4"  id="painel" style="width: 100%; margin-top: 20px"
 	    			columnClasses="rotulo, campo">
-	    		<p:outputLabel value="Nro Orden" for="nro_orden"/>
-	    		<p:inputText id="nro_orden" size="20" maxlength="20"/>
 	    		
-	    		<p:outputLabel value="Fecha" for="fecha"/>
-	             <p:datePicker id="fecha" required="true" showTime="false" showIcon="true" locale="es"/>
+	    		<p:outputLabel value="Nro Orden" for="nro_orden"/>
+	    		<p:inputText  id="nro_orden" autocomplete="off" size="20" maxlength="20" required="true" value="#{formCab.cabApp.nroOrden}"/>
+	    		
+	    		 <p:outputLabel value="Fecha" for="fecha"/>
+	             <p:datePicker  autocomplete="off" id="fecha" required="true" showTime="false" showIcon="true" locale="es" value="#{formCab.cabApp.fecha}"/>
 	    		
 	    		<p:outputLabel value="Sector" for="sector"/>
-	    		 <p:selectOneMenu styleClass="selectOneMenu"
-	    		  immediate="false"  id="sector" widgetVar="sector"   required="false"  autoWidth="false" filter="true" converter="#{sectorConverter}"   >
-                  <f:selectItem itemValue="#{null}" itemLabel="--Seleccione Sector--" noSelectionOption="true" />
-                  <f:selectItems value="#{formCab.sectores}" var="sec" itemLabel="#{sec.sector}" itemValue="#{sec}"/>
-       </p:selectOneMenu>
-	    		
-	    	</p:panelGrid>
-	    	 <p:dataTable id="det1" widgetVar="det1" var="det1"  editable="true" style="margin-bottom:20px" 
-                selectionMode="single" emptyMessage="No Existen Registros" paginator="true" paginatorAlwaysVisible="false"
+	    		<p:selectOneMenu styleClass="selectOneMenu" value="#{formCab.cabApp.sector}"
+	    		  immediate="false"  id="sector" widgetVar="sector" required="true"  autoWidth="true" filter="true" converter="#{sectorConverter}"   >
+                 <f:selectItem itemValue="#{null}" itemLabel="--Seleccione Sector--" noSelectionOption="true" />
+                 <f:selectItems value="#{formCab.sectores}" var="sector" itemLabel="#{sector.sector}" itemValue="#{sector}"/>
+                </p:selectOneMenu>
+                
+                <p:outputLabel value="Metodo de Aplicacion" for="metodo"/>
+                  <p:selectOneMenu update="mojamiento" id="metodo" valueChangeListener="#{formCab.metodoListener}" label="Metodos" value="#{formCab.cabApp.metodo}" autoWidth="true" filter="true" disabled="#{formCab.cabApp.id ne null}" >
+                        <f:selectItems  value="#{formCab.lstMetodos}" var="cos" itemLabel="#{cos.valor}" itemValue="#{cos.valor}"  />
+                        <p:ajax process="@this" update="mojamiento ummojamiento maquina @widgetVar(umdosis)"   />
+                </p:selectOneMenu>
+                                    
+                <p:outputLabel value="Mojamiento Total" for="mojamiento"/>
+                <p:inputText id="mojamiento" inputStyle="text-align: right" value="#{formCab.cabApp.mojamiento}"  label="Mojamiento" disabled="#{formCab.cabApp.metodo eq 'VÍA RIEGO'  }">
+                	<p:keyFilter mask="num"></p:keyFilter>
+                </p:inputText>
+                
+                <p:outputLabel value="UM mojamiento" for="ummojamiento"/>
+                <p:selectOneMenu id="ummojamiento" label="UM Mojamiento" value="#{formCab.cabApp.umMojamiento}" autoWidth="true" filter="true" disabled="#{formCab.cabApp.metodo eq 'VÍA RIEGO'}">
+                    <f:selectItems value="#{formCab.lstUmedidaGasto}" var="cos" itemLabel="#{cos.valor}" itemValue="#{cos.valor}"  />
+                    <f:attribute name="param" value="#{bindingController.productoComponent}" /> 
+                </p:selectOneMenu>
+                
+                <p:outputLabel value="Maquina" for="maquina"/>
+                <p:selectOneMenu id="maquina" label="Maquina Utilizada" value="#{formCab.cabApp.maquina}"  autoWidth="true" filter="true" disabled="#{formCab.cabApp.metodo eq 'VÍA RIEGO'}" >
+                        <f:selectItems value="#{formCab.lstMaquinas}" var="cos" itemLabel="#{cos.valor}" itemValue="#{cos.valor}"  />
+                </p:selectOneMenu>
+                                                
+                <p:outputLabel value="Aplicador" for="aplicador"/>
+                <p:inputText id="aplicador" inputStyle="text-align: right" value="#{formCab.cabApp.aplicadores}" style="width:100%" label="Aplicador(es)"/>
+                
+                <p:outputLabel value="Inicio" for="inicio"/>
+                <p:calendar id="inicio" style="width: 10em;" readonlyInput="true" locale="es"  value="#{formCab.cabApp.horaInicio}" binding="#{formCab.inicioComponent}"
+										 pattern="dd-MM-yyyy HH:mm" converter="#{localDateTimeConverter}"  mode="popup" title="#"
+										autocomplete="off"   required="true" showButtonPanel="true" navigator="true"   >
+										</p:calendar>					
+                 
+                <p:outputLabel value="Termino" for="termino"/>
+                <p:calendar id="termino"  validator="#{dateRangeValidator.validate}"  style="width: 10em;" readonlyInput="true" locale="es"  value="#{formCab.cabApp.horaTermino}"    
+										 pattern="dd-MM-yyyy HH:mm" converter="#{localDateTimeConverter}"   mode="popup" title="#"
+										autocomplete="off"  required="true" showButtonPanel="true" navigator="true"   >
+                                              <f:attribute name="inicio" value="#{formCab.inicioComponent}" />
+		         </p:calendar>
+		         
+		         <p:outputLabel value="Temporada" for="temporada"/>
+		           <p:inputText id="temporada" inputStyle="text-align: right" value="#{formCab.cabApp.temporada}"  label="Temporada" >
+                	<p:keyFilter mask="num"></p:keyFilter>
+                </p:inputText>
+		         
+		         <p:outputLabel value="Producto" for="producto_"/>
+	               <h:panelGroup  columns="2">
+	              <p:selectOneMenu value="#{formCab.productoSel}"  id="producto_"  style="width:60%"  autoWidth="false" filter="true" converter="#{productoConverter}" >
+	              	    <f:selectItems value="#{formCab.productos}" var="cos" itemLabel="#{cos.producto}" itemValue="#{cos}"  />
+	              	    <p:ajax  event="change" process="@this"/>
+	              	 
+	              </p:selectOneMenu>
+	              <p:commandButton value="Detalle"  icon="pi pi-plus" id="btnAddDet" process="@this"  action="#{formCab.addRow()}" oncomplete="PF('det1').addRow();">
+	              </p:commandButton>
+	              </h:panelGroup>
+		</p:panelGrid>
+	    
+	    
+	     <p:dataTable id="det1"  widgetVar="det1" var="det1" value="#{formCab.detAplicacionDataModel}"  editable="true" style="margin-bottom:20px" 
+                paginator="true" paginatorAlwaysVisible="false" emptyMessage=""
+                 rowKey="#{det1.id}" selection="#{formCab.detAplicacion}"
                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                  rowsPerPageTemplate="5,10,15">
-                 
-                  
+         
         <f:facet name="header">
             Detalle
         </f:facet>
-         <p:column headerText="Id">
-              <h:outputText value="Id" />
+        <p:ajax event="rowEdit" listener="#{formCab.onRowEdit}" oncomplete="$('.ui-row-editor span.ui-icon-pencil').each(function(){$(this).css('visibility','visible')});"/>
+        <p:ajax event="rowEditCancel" onstart="$('.ui-row-editor span.ui-icon-pencil').each(function(){$(this).css('visibility','visible')});" update="det1" />
+        <p:ajax event="rowEditInit" oncomplete="$('.ui-row-editor span.ui-icon-pencil').each(function(){$(this).css('visibility','hidden')});" />
+        <p:column  selectionMode="single">
+            
         </p:column>
-   
-        
-        <p:column headerText="Producto" >
-            <h:outputText value="Producto" />
+
+
+         <p:column headerText="Id" >
+              <h:outputText value="#{det1.id}" />
         </p:column>
-                
-        <p:column headerText="Dosis">
-             <h:outputText value="333" />
-        </p:column>
-        
-         <p:column headerText="UM Dosis">
-             <h:outputText value="333" />
-         </p:column>
                
-         <p:column headerText="Objetivo">
-            <h:outputText value="333" />
+        
+         <p:column headerText="Producto" >
+             <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{det1.producto.producto}" /></f:facet>
+                <f:facet name="input">
+                   <p:selectOneMenu   binding="#{bindingController.productoComponent}"  value="#{det1.producto}" style="width:100%"  autoWidth="false" filter="true" converter="#{productoConverter}">
+                        <f:selectItems value="#{formCab.productos}" var="cos" itemLabel="#{cos.producto}" itemValue="#{cos}"  />
+                        
+                    </p:selectOneMenu>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+        <p:column headerText="Dosis"  >
+            <p:cellEditor>
+             	    <f:facet name="output"><h:outputText value="#{det1.dosis}" /></f:facet>
+             		<f:facet name="input"><p:inputText id="dosis" required="true"  requiredMessage="Dosis requiere un valor numerico" type="numeric" inputStyle="text-align: right" value="#{det1.dosis}" style="width:100%" label="Dosis">
+             		<p:keyFilter mask="num" />
+             		</p:inputText>
+             		</f:facet>
+            </p:cellEditor>
+        </p:column>
+                 
+        <p:column headerText="UM Dosis" >
+             <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{det1.umDosis}" /></f:facet>
+                <f:facet name="input">
+                   <p:selectOneMenu id="umdosis" widgetVar="umdosis" label="UM dosis" value="#{det1.umDosis}" style="width:100%"    autoWidth="false" filter="true" >
+                        <f:selectItems value="#{formCab.lstUmedida}" var="cos"  itemLabel="#{cos.valor}" itemValue="#{cos.valor}"  >
+                        </f:selectItems>
+                        <f:attribute name="param" value="#{bindingController.productoComponent}" /> 
+                    </p:selectOneMenu>
+                </f:facet>
+            </p:cellEditor>
+                                
+        </p:column>
+        <p:column headerText="Objetivo">
+            <p:cellEditor>
+             <f:facet name="output"><h:outputText value="#{det1.objetivo}" /></f:facet>
+                <f:facet name="input">
+                   <p:selectOneMenu label="Objetivo" value="#{det1.objetivo}" style="width:100%"   autoWidth="false" filter="true" >
+                        <f:selectItems value="#{formCab.lstObjetivos}" var="cos" itemLabel="#{cos.valor}" itemValue="#{cos.valor}"  />
+                    </p:selectOneMenu>
+              </f:facet>
+             </p:cellEditor>
          </p:column> 
          
-          <p:column headerText="Carencia">
-            <h:outputText value="333" />
-         </p:column>
-         
-         <p:column headerText="Metodo Aplicacion">
-            <h:outputText value="xxxxx" />
-         </p:column>
-         
-         <p:column headerText="Mojamiento Total">
-            <h:outputText value="333" />
-         </p:column>
-         
-         <p:column headerText="UM Mojamiento">
-            <h:outputText value="LT" />
-         </p:column>
-         
-         <p:column headerText="Aplicador">
-            <h:outputText value="xxxxxxxxxxxxx" />
-         </p:column>
-         
-         <p:column headerText="Maquina Utilizada">
-            <h:outputText value="xxxxxxxx" />
-         </p:column>
-        
-         <p:column headerText="Hora Inicio">
-            <h:outputText value="xxxxxxxx" />
-         </p:column>
-         
-         <p:column headerText="Hora Termino">
-            <h:outputText value="xxxxxxxx" />
+          <p:column headerText="Carencia" >
+             <p:cellEditor>
+             <f:facet name="output"><h:outputText value="#{det1.carencia}" /></f:facet>
+             <f:facet name="input"><p:inputText inputStyle="text-align: right" value="#{det1.carencia}" style="width:100%" label="Carencia">
+                   <p:keyFilter mask="int"></p:keyFilter>
+                 </p:inputText>
+             </f:facet>
+             </p:cellEditor>
          </p:column>
           
-        
-        
-        <p:column style="width:32px">
-             <p:rowEditor ></p:rowEditor>
+         
+        <p:column styleClass="ui-editable-column-options">
+             <p:rowEditor>
+              </p:rowEditor>
+	
         </p:column>
-    </p:dataTable>  
+        <p:column>
+          <p:commandButton  icon="pi pi-trash" immediate="true" process="@this" update="det1" 
+		action="#{formCab.eliminarFila()}" rendered="#{det1.id eq -1}" >
+			     
+			<f:setPropertyActionListener 
+				target="#{formCab.detAplicacion}" 
+				value="#{det1}" >
+				</f:setPropertyActionListener>
+			</p:commandButton>
+			
+		<p:commandButton  icon="pi pi-trash" onclick="PF('confirmDialog').show()"  
+		 rendered="#{det1.id != -1}" >
+		 <f:setPropertyActionListener 
+						target="#{formCab.detAplicacion}" 
+						value="#{det1}" >
+			</f:setPropertyActionListener>
+		</p:commandButton>
+		
+	   <p:confirmDialog message="Seguro de borrar este registro?" header="Confirmacion" severity="alert" widgetVar="confirmDialog">  
+                    <p:commandButton value="Si" action="#{formCab.eliminarFila()}" oncomplete="PF('confirmDialog').hide()"  immediate="true" process="@this" update="det1" >
+                   
+                    </p:commandButton>  
+  
+                    <p:commandButton value="Not" onclick="PF('confirmDialog').hide();" type="button" />  
+                </p:confirmDialog>  
+		
+        </p:column>
+       </p:dataTable>  
     	</h:form>
+ </ui:define>
 </ui:composition>

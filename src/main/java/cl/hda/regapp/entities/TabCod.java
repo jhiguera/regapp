@@ -1,5 +1,7 @@
 package cl.hda.regapp.entities;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="tab_cod")
-public class TabCod {
+public class TabCod implements Serializable {
 
 	
 	@Id

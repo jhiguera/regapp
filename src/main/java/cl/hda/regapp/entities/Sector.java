@@ -1,5 +1,6 @@
 package cl.hda.regapp.entities;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,24 +13,29 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import org.hibernate.proxy.HibernateProxy;
 
 
 @Entity
 @Table(name="sector")
-public class Sector {
+public class Sector implements Serializable  {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
 
-	@OneToMany(mappedBy="sector" , fetch = FetchType.EAGER, cascade = CascadeType.ALL,  orphanRemoval = true)
+	@OneToMany(mappedBy="sector" , fetch = FetchType.LAZY, cascade = CascadeType.REMOVE,  orphanRemoval = false)
 	List<CabAplicacion> cabAplicacion;
 	
 	@Column(name="sector_productivo")
 	String sector;
-		
+	
+	String pseudonimo;
+	
+	
+	
 	String parcela;
 	
 	@Column(name="nombre_cuartelero")
@@ -48,13 +54,22 @@ public class Sector {
 	String portainjerto;
 	
 	@Column(name="plantas_reales")
-	Integer plantasReales;
+	Double plantasReales;
+	
+	@Column(name = "temporada", precision=4, length=4)
+	Integer temporada;
 	
 	
 	
-	
-	
-    public Long getId() {
+    public Integer getTemporada() {
+		return temporada;
+	}
+
+	public void setTemporada(Integer temporada) {
+		this.temporada = temporada;
+	}
+
+	public Long getId() {
 		return id;
 	}
 
@@ -126,12 +141,20 @@ public class Sector {
 		this.portainjerto = portainjerto;
 	}
 
-	public Integer getPlantasReales() {
+	public Double getPlantasReales() {
 		return plantasReales;
 	}
 
-	public void setPlantasReales(Integer plantasReales) {
+	public void setPlantasReales(Double plantasReales) {
 		this.plantasReales = plantasReales;
+	}
+
+	public String getPseudonimo() {
+		return pseudonimo;
+	}
+
+	public void setPseudonimo(String pseudonimo) {
+		this.pseudonimo = pseudonimo;
 	}
 
 	@Override

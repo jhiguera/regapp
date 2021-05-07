@@ -1,0 +1,78 @@
+<ui:composition 
+    template="/WEB-INF/template/LayoutPrincipal.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+    <script>
+    $(document).ready(function() {
+        var dialog1 = $('.ui-dialog .ui-dialog-content');
+
+        dialog1.scroll(function() {
+            $('#ui-datepicker-div').hide();
+        });
+    });
+    
+    </script>
+     
+  <ui:define name="titulo">Otros parametros</ui:define>
+  <ui:define name="corpo">
+  
+    
+<h:form id="form1">
+	    	<h1>Listado Parametros</h1>
+ <p:messages id="messages" showDetail="true" closable="true" showSummary="false">
+        <p:autoUpdate />
+    </p:messages>	    	
+	    	<p:toolbar style="margin-top: 20px">
+	    		<p:toolbarGroup >
+	    		    <p:commandButton value="Grabar" id="botonSalvar" action="#{tabcod.salvar()}" />
+	    		      <p:commandButton value="Agregar Parametro"  icon="pi pi-plus" id="botonDetalleplus" 
+	    		         process="@this" update="tab"  action="#{tabcod.addRow()}" oncomplete="PF('tab').paginator.setPage(PF('tab').paginator.cfg.pageCount - 1);"  />
+	    	 		 
+	    		</p:toolbarGroup>
+	    		
+	    	</p:toolbar>
+	    <p:panelGrid columns="2" id="painel" style="width: 100%; margin-top: 20px" columnClasses="rotulo, campo">
+	    		<p:outputLabel value="Codigo Parametro" for="codigo_parametro"/>
+	    		<p:selectOneMenu     styleClass="selectOneMenu" value="#{tabcod.codigo}" 
+	    		   id="codigo_parametro" widgetVar="codigo_parametro" required="true"  autoWidth="false" filter="true"    >
+                 <f:selectItem itemValue="#{null}" itemLabel="--Seleccione--" noSelectionOption="true" />
+                 <f:selectItems value="#{tabcod.codigos}" var="cod" itemLabel="#{cod}" itemValue="#{cod}"/>
+                   <p:ajax  update="tab" listener="#{tabcod.obtener()}"  process="@form"/>
+                 </p:selectOneMenu>
+	    </p:panelGrid>
+	    <br/>
+	    <p:dataTable id="tab" locale="es" showCurrentPageReport = "true" currentPageReportTemplate="{currentPage} #{loc.of} de {totalPages}" 
+	 	   widgetVar="tab" var="tab" value="#{tabcod.tabCodDataModel}" editable="true"  style="margin-bottom:20px" 
+                 paginator="true"   emptyMessage=""
+                 rows="5"
+                 rowKey="#{p.id}"  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                 rowsPerPageTemplate="5,10,15"
+                 >
+        <f:facet name="header">
+            Lista Parametros
+        </f:facet>
+        	<p:ajax event="rowEdit"  oncomplete="$('.ui-row-editor span.ui-icon-pencil').each(function(){$(this).css('visibility','visible')});"/>
+        	<p:ajax event="rowEditCancel" listener="#{tabcod.onRowCancel}" onstart="$('.ui-row-editor span.ui-icon-pencil').each(function(){$(this).css('visibility','visible')});" />
+            <p:ajax event="rowEditInit" oncomplete="$('.ui-row-editor span.ui-icon-pencil').each(function(){$(this).css('visibility','hidden')});" />
+              
+        <p:column selectionMode="single" style="width:16px;text-align:center"/>                 
+        <p:column headerText="Codigo" filterBy="#{tab.codigo}" filterMatchMode="contains">
+               <h:outputText value="#{tab.codigo}"></h:outputText>
+        </p:column>
+        <p:column headerText="Valor">
+           <p:cellEditor>
+            <f:facet name="output"><h:outputText value="#{tab.valor}" /></f:facet>
+             <f:facet name="input"><p:inputText required="true" inputStyle="text-align: right" value="#{tab.valor}" style="width:100%" label="Valor"/></f:facet>
+            </p:cellEditor>
+        </p:column>
+        <p:column style="width:32px">
+             <p:rowEditor>
+              </p:rowEditor>
+        </p:column>
+    </p:dataTable> 
+   </h:form>
+  </ui:define>
+</ui:composition>

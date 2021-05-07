@@ -26,7 +26,6 @@ public class TabCodConverter implements Converter,Serializable{
 		
 		Optional<TabCod> s = tabCodRepository.findById(new Long(value));
 		return s.get();
-
 	}
 
 	@Override

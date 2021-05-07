@@ -29,6 +29,7 @@ public class ProductoConverter implements Converter,Serializable{
 
 	}
 
+	/*
 	@Override
 	public String getAsString(FacesContext context, UIComponent component, Object value) {
 		
@@ -45,5 +46,25 @@ public class ProductoConverter implements Converter,Serializable{
 		}
 		
 	}
-
+*/
+	
+	@Override
+	public String getAsString(FacesContext context, UIComponent component, Object value) {
+		
+		if(value!=null) {
+			try {
+			
+				Producto s = (Producto)value;
+			    return s.toString();
+			}catch(ClassCastException e ) {
+				
+				Optional<Producto> s = productoRepository.findById((long) value);
+				return s.get().toString();
+			}
+			
+	     }
+		
+		return "";
+	}
+	
 }

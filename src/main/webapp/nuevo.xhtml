@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      
+      
+      >
+
+<h:head>
+<script>
+PrimeFaces.locales['es'] = {
+        closeText: 'Cerrar',
+        prevText: 'Anterior',
+        nextText: 'Siguiente',
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+        dayNamesMin: ['D', 'L', 'M', 'X', 'J', 'V', 'S'],
+        weekHeader: 'Semana',
+        firstDayOfWeek: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: '',
+        timeOnlyTitle: 'Sólo hora',
+        timeText: 'Tiempo',
+        hourText: 'Hora',
+        minuteText: 'Minuto',
+        secondText: 'Segundo',
+        currentText: 'Fecha actual',
+        ampm: false,
+        month: 'Mes',
+        week: 'Semana',
+        day: 'Día',
+        allDayText: 'Todo el día'
+    };
+</script>
+</h:head>
+<h:body>
+   <!-- MENU -->
+  <ui:include src="menu.xhtml" />	
+   <h:form id="form1">
+     
+      <p:hotkey bind="insert" process="@this" update=":form1:msgs" action="#{dtAddRowView.onAddNew()}" oncomplete="PF('det1').addRow();PF('statusDialog').hide()"/>
+          
+     <p:messages id="messages" showDetail="true" closable="true">
+        <p:autoUpdate />
+    </p:messages>
+
+        <p:panel>
+            <f:facet name="header" >
+               #{msg['app.titulo']}           
+                 
+                
+            </f:facet>
+            
+        <p:toolbar>
+           <f:facet name="left">
+	            <p:commandButton type="button" oncomplete="PF('statusDialog').hide()" value="Nuevo" icon="pi pi-file" action="#{cabCosechaController.salvar}" update = "@form" process="@form" />
+	            <span class="ui-separator" >
+	                <span class="ui-icon pi pi-ellipsis-v" />
+	            </span>
+	             <p:commandButton oncomplete="PF('statusDialog').hide()" value="Guardar" icon="pi pi-save" action="#{cabCosechaController.salvar}" update = "@form" process="@form"/> 
+	             <p:commandButton value="Detalle" icon="pi pi-plus-circle" process="@this" update=":form1:msgs" action="#{dtAddRowView.onAddNew()}" oncomplete="PF('det1').addRow();" onsuccess="PF('statusDialog').hide()"/>  
+           </f:facet>
+ 
+        <f:facet name="right">
+               <p:button value="Listar" icon="pi pi-list"  outcome="/listar" />
+
+        </f:facet>
+ 
+    </p:toolbar>
+          
+       
+    <p:panelGrid  columns="4" layout="grid" columnClasses="p-col-12 p-md-3 p-xl-2, p-col-12 p-md-9 p-xl-4, p-col-12 p-md-3 p-xl-2, p-col-12 p-md-9 p-xl-4" contentStyleClass="p-align-baseline ui-fluid">
+	    
+	    <p:outputLabel value="Correlativo"/>
+	    <p:inputText value="#{cabCosechaController.cab.correlativo}" id="correlativo" required="true" >
+	       <p:ajax event="blur" partialSubmit="true" update="@this, sector, producto" process="@this" listener="#{cabCosechaController.validar}" oncomplete="PF('statusDialog').hide()"></p:ajax>
+	       <p:keyFilter regEx="/[\d]/"/>  
+	    </p:inputText>
+	    <p:outputLabel value="Fecha"/>
+	    <p:datePicker value="#{cabCosechaController.cab.fecha}" required="true" showTime="false" showIcon="true" locale="es"/>
+	    
+	    <p:outputLabel value="Sector" for="sector" />
+	    <p:selectOneMenu immediate="false"  id="sector" widgetVar="sector"  value="#{cabCosechaController.sectorSel}" required="false"  autoWidth="false" filter="true" converter="#{sectorConverter}"   >
+                  <f:selectItem itemValue="#{null}" itemLabel="--Seleccione Sector--" noSelectionOption="true" />
+                  <f:selectItems value="#{cabCosechaController.sectores}" var="sec" itemLabel="#{sec.subsector}" itemValue="#{sec}"/>
+       </p:selectOneMenu>
+       
+       
+        <p:outputLabel value="Producto" for="producto" />
+       
+           <p:selectOneMenu label="Producto" id="producto" required="true" widgetVar="producto" value="#{cabCosechaController.productoSel}" style="width:100%"   autoWidth="false" filter="true" converter="#{productoConverter}">
+               <f:selectItem itemValue="#{null}" itemLabel="--Seleccione Producto--" noSelectionOption="true" />
+                <f:selectItems value="#{cabCosechaController.productos}" var="prod" itemLabel="#{prod.nombre}" itemValue="#{prod}"  />
+       </p:selectOneMenu>
+   </p:panelGrid>
+	</p:panel>      
+    
+    <p:growl id="msgs" showDetail="true"/>
+      
+      <p:dataTable id="det1" widgetVar="det1" var="det1" value="#{dtAddRowView.cosechaDetDataModel}" editable="true" style="margin-bottom:20px" 
+       selection="#{dtAddRowView.cosechaDetSel}" rowKey="#{det1.id}" selectionMode="single" emptyMessage=""
+        paginator="true"
+                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                 rowsPerPageTemplate="5,10,15">
+                 
+         <p:ajax event="rowSelect"/>
+         
+        <f:facet name="header">
+            Detalle
+        </f:facet>
+          <p:ajax event="rowEdit" listener="#{dtEditView.onRowEdit}" update=":form1:msgs" oncomplete="PF('statusDialog').hide()" />
+          <p:ajax event="rowEditCancel" listener="#{dtEditView.onRowCancel}" update=":form1:msgs" oncomplete="PF('statusDialog').hide()" />
+          <p:ajax event="cellEdit" listener="#{dtEditView.onCellEdit}" update=":form1:msgs" oncomplete="PF('statusDialog').hide()" />
+         <p:column headerText="Id">
+              <h:outputText value="#{det1.id}" />
+        </p:column>
+   
+        
+        <p:column headerText="Kg Cosechados" >
+            <h:outputText value="#{det1.kiloscosechados}" />
+        </p:column>
+                
+        <p:column headerText="Monto a Pagar ">
+             <h:outputText value="#{det1.montopagar}" />
+        </p:column>
+        
+         <p:column headerText="Numero Cajas">
+             <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{det1.nroCajas}" /></f:facet>
+                <f:facet name="input"><p:inputText inputStyle="text-align: right" value="#{det1.nroCajas}" style="width:100%" label="Numero Cajas"/></f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+        
+       <p:column headerText="Cosechero">
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{det1.cosechero.nombre}" /></f:facet>
+                <f:facet name="input">
+                   <p:selectOneMenu label="Cosechero" value="#{det1.cosechero}" style="width:100%"   autoWidth="false" filter="true" converter="#{cosecheroConverter}">
+                        <f:selectItems value="#{dtEditView.cosecheros}" var="cos" itemLabel="#{cos.nombre}" itemValue="#{cos}"  />
+                    </p:selectOneMenu>
+                </f:facet>
+            </p:cellEditor>
+        </p:column> 
+        
+        <p:column style="width:32px">
+             <p:rowEditor  >
+                <p:ajaxStatus oncomplete="PF('statusDialog').hide()"></p:ajaxStatus>
+             </p:rowEditor>
+        </p:column>
+    </p:dataTable>                            
+    </h:form>
+    
+    <p:ajaxStatus onstart="PF('statusDialog').show()" />  
+      <p:dialog widgetVar="statusDialog" modal="true" closable="false">  
+	<p:graphicImage name="/images/ajaxloadingbar.gif" />  
+   </p:dialog>
+      
+ </h:body>
+</html>

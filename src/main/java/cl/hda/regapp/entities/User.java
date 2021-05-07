@@ -24,7 +24,7 @@ public class User  implements Serializable {
     @Transient
     private String passwordConfirm;
 
-    @ManyToMany(cascade = {
+    @ManyToMany(fetch = FetchType.EAGER,cascade = {
             CascadeType.MERGE
         })
         @JoinTable(name = "user_roles",

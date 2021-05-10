@@ -3,10 +3,15 @@ package cl.hda.regapp.web;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -20,6 +25,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 import javax.transaction.Transactional;
 
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -34,6 +42,8 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.authentication.jaas.AuthorityGranter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -50,6 +60,15 @@ import cl.hda.regapp.model.export;
 import cl.hda.regapp.repository.CabAplicacionRepository;
 import cl.hda.regapp.repository.DetAplicacionRepository;
 import cl.hda.regapp.repository.UserRepository;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 @Named("listarCab")
 @SessionScope
@@ -111,7 +130,41 @@ public class ListarCabController {
  	 		 cabAplicacionDataModel = new CabAplicacionDataModel((List<CabAplicacion>)cabAplicacionRepository.findByUsuario(usuario));
  		  }
  	}
+    
+	@Autowired
+	ResourceLoader resourceLoader;
+
+	@Autowired
+	DataSource dataSource;
+
+	public void generarReporte() throws JRException, IOException, SQLException {
 		
+		
+		 Resource resource = this.resourceLoader.getResource("classpath:/jasper/test.jrxml");
+		 InputStream jasperStream = resource.getInputStream();
+		 JasperDesign design = JRXmlLoader.load(jasperStream);
+		 JasperReport report = JasperCompileManager.compileReport(design);
+		      
+		 Map<String, Object> param = new HashMap<>();
+		 param.put("datasource", this.dataSource.getConnection());
+		   
+		 JasperPrint jasperPrint = JasperFillManager.fillReport(report, param, this.dataSource.getConnection());
+	     
+	        FacesContext facesContext = FacesContext.getCurrentInstance();
+	        ExternalContext externalContext = facesContext.getExternalContext();
+	        externalContext.setResponseContentType("application/x-pdf");
+	        externalContext.setResponseHeader("Content-disposition", "inline; filename=\"Reporte"   + ".pdf\"");
+
+	        JasperExportManager.exportReportToPdfStream(jasperPrint, (OutputStream)externalContext.getResponseOutputStream());
+	        facesContext.responseComplete();
+
+	       
+	}
+
+	
+	
+	
+	
 	public void export2Excel() throws Throwable {
 	
 	  String sqlUsuario = "";
@@ -321,7 +374,10 @@ public class ListarCabController {
 		       
           cabAplicacion.getDetAplicacion().clear();
 		  cabAplicacionRepository.delete(cabAplicacion);
-		  cabAplicacionDataModel.getLstCabAp().remove(cabAplicacion);
+		  List<CabAplicacion> lst = cabAplicacionDataModel.getLstCabAp();
+		  lst.remove(cabAplicacion);
+		  cabAplicacionDataModel = new CabAplicacionDataModel(lst);
+		  
 		  facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se elimino Correctamente", null));
 		
 		}catch(Exception e){

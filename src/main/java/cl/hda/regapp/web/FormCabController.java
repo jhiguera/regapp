@@ -1,11 +1,17 @@
 package cl.hda.regapp.web;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -26,6 +32,9 @@ import javax.persistence.Query;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 import org.primefaces.PrimeFaces;
 import org.primefaces.component.datatable.DataTable;
@@ -33,6 +42,9 @@ import org.primefaces.event.RowEditEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Isolation;
@@ -55,6 +67,15 @@ import cl.hda.regapp.repository.DetAplicacionRepository;
 import cl.hda.regapp.repository.ProductoRepository;
 import cl.hda.regapp.repository.SectorRepository;
 import cl.hda.regapp.repository.TabCodRepository;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 
 @Named("formCab")
@@ -494,11 +515,18 @@ public void cargarParametros(){
 	     lstUmedida = lstUmedida.stream().filter(x->{ if ( x.getValor().equals("CC/HL") || x.getValor().equals("GR/HL") ) return true;else return false;}).collect(Collectors.toList());
 	  else
 	    lstUmedida = lstUmedida.stream().filter(x->{ if ( x.getValor().equals("LT/HA") || x.getValor().equals("KG/HA") ) return true;else return false;}).collect(Collectors.toList());
-
-	  
 	 
 	 lstUmedidaGasto = tabCodRepository.findByCodigo("unidad_medida_gasto");
 }
+
+
+
+
+
+
+
+
+
 
 public String getTitulo() {
 	return titulo;

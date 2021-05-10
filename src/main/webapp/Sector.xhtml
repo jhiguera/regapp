@@ -30,6 +30,7 @@
 	    		    <p:commandButton value="Grabar" id="botonSalvar" action="#{sec.salvar()}" />
 	    		      <p:commandButton value="Agregar Sector"  icon="pi pi-plus" id="botonDetalleplus" update="sec"
 	    		         process="@this"  action="#{sec.addRow()}" oncomplete="PF('sec').paginator.setPage(PF('sec').paginator.cfg.pageCount - 1);"  />
+	    	 		     <p:commandButton value="Importar" type="button" icon="pi pi-external-link" onclick="PF('dlg3').show()"/>
 	    	 		 
 	    		</p:toolbarGroup>
 	    		
@@ -116,13 +117,40 @@
              <p:rowEditor>
               </p:rowEditor>
         </p:column>
-        
-        
-        
-        
+     
      </p:dataTable> 
         
+        <p:dialog header="Header" widgetVar="dlg3" minHeight="500" width="700" showEffect="fade">
+    <p class="p-m-0">
+       <p:fileUpload   style="width:100%" cancelLabel="Cancelar" label="Seleccionar" uploadLabel="Subir Archivo" 
+       mode="advanced" 
+                      multiple="false"
+                      sizeLimit="102400" allowTypes="/(\.|\/)(csv)$/"
+                      invalidSizeMessage="Maximum file size allowed is 100 KB"
+                      invalidFileMessage="only csv is allowed"
+       
+       
+       
+       fileUploadListener="#{sec.subirArchivo}"/>
+    
+    
+    
+    </p>
+    <f:facet name="footer">
+        <p:commandButton type="button" value="Cancelar" styleClass="ui-button-flat p-mr-2" style="width: 6rem" />
+        <p:commandButton type="button" value="Importar" style="width: 5rem" />
+    </f:facet>
+    
+    </p:dialog>
      
    </h:form>
+   
+   
+   
+
+   
+   
+   
+   
   </ui:define>
 </ui:composition>

@@ -119,7 +119,7 @@
 			<p:dialog header="Sesion Caducada" widgetVar="sessionTimeOutDialog" 
 			 modal="true" fixedCenter="true" closable="false" width="400" visible="false">
 			     <h:outputText value="Sesion" />
-			     <input id="confirmBackToLogin" type="button" value="Volver #{session.maxInactiveInterval}"
+			     <input id="confirmBackToLogin" type="button" value="Volver en  #{session.maxInactiveInterval}"
 			        onclick="window.location='#{facesContext.externalContext.requestContextPath}/login.xhtml';" />
 		</p:dialog>
 	

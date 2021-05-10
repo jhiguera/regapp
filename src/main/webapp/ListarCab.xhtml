@@ -38,6 +38,8 @@
 	    		    </p:commandButton>
 	    		    <p:commandButton value="Ver"  id="botonDetalle" action="#{listarCab.ver()}" update="dlgDetalle" oncomplete="PF('dlgDetalle').show()" />
 	    		    <p:commandButton value="Exportar" ajax="false"  id="botonExportar" action="#{listarCab.export2Excel()}" />
+	    		    <p:commandButton value="Generar" ajax="false"  id="botonReporte" action="#{listarCab.generarReporte()}" />
+	    		    
 	    		    
 	    		</p:toolbarGroup>
 	    		<p:toolbarGroup align="right">

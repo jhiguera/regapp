@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="test" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="32789b9f-b002-4665-ae16-5927260b5463">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT reg_aplicacion.cab_aplicacion.aplicadores,
+	reg_aplicacion.cab_aplicacion.id,
+	reg_aplicacion.cab_aplicacion.fecha,
+	reg_aplicacion.cab_aplicacion.fecha_creacion,
+	reg_aplicacion.cab_aplicacion.hora_inicio,
+	reg_aplicacion.cab_aplicacion.hora_termino,
+	reg_aplicacion.cab_aplicacion.maquina,
+	reg_aplicacion.cab_aplicacion.metodo,
+	reg_aplicacion.cab_aplicacion.mojamiento,
+	reg_aplicacion.cab_aplicacion.nro_orden,
+	reg_aplicacion.cab_aplicacion.um_mojamiento,
+	reg_aplicacion.cab_aplicacion.usuario,
+	reg_aplicacion.cab_aplicacion.sector_id,
+	reg_aplicacion.cab_aplicacion.temporada,
+	reg_aplicacion.sector.nombre_cuartelero,
+	reg_aplicacion.sector.especie_plantada,
+	reg_aplicacion.sector.id,
+	reg_aplicacion.sector.parcela,
+	reg_aplicacion.sector.plantas_reales,
+	reg_aplicacion.sector.variedad_portainjerto,
+	reg_aplicacion.sector.pseudonimo,
+	reg_aplicacion.sector.sector_productivo
+FROM reg_aplicacion.cab_aplicacion
+	INNER JOIN reg_aplicacion.sector ON 
+	 reg_aplicacion.cab_aplicacion.sector_id = reg_aplicacion.sector.id]]>
+	</queryString>
+	<field name="aplicadores" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="aplicadores"/>
+		<property name="com.jaspersoft.studio.field.label" value="aplicadores"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cab_aplicacion"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="id"/>
+		<property name="com.jaspersoft.studio.field.label" value="id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cab_aplicacion"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="fecha"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cab_aplicacion"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha_creacion" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="fecha_creacion"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha_creacion"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cab_aplicacion"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="hora_inicio" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="hora_inicio"/>
+		<property name="com.jaspersoft.studio.field.label" value="hora_inicio"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cab_aplicacion"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="hora_termino" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="hora_termino"/>
+		<property name="com.jaspersoft.studio.field.label" value="hora_termino"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cab_aplicacion"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="maquina" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="maquina"/>
+		<property name="com.jaspersoft.studio.field.label" value="maquina"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cab_aplicacion"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="metodo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="metodo"/>
+		<property name="com.jaspersoft.studio.field.label" value="metodo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cab_aplicacion"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="mojamiento" class="java.lang.Float">
+		<property name="com.jaspersoft.studio.field.name" value="mojamiento"/>
+		<property name="com.jaspersoft.studio.field.label" value="mojamiento"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cab_aplicacion"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nro_orden" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="nro_orden"/>
+		<property name="com.jaspersoft.studio.field.label" value="nro_orden"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cab_aplicacion"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="um_mojamiento" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="um_mojamiento"/>
+		<property name="com.jaspersoft.studio.field.label" value="um_mojamiento"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cab_aplicacion"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="usuario" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="usuario"/>
+		<property name="com.jaspersoft.studio.field.label" value="usuario"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cab_aplicacion"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="sector_id" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="sector_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="sector_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cab_aplicacion"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="temporada" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="temporada"/>
+		<property name="com.jaspersoft.studio.field.label" value="temporada"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cab_aplicacion"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombre_cuartelero" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre_cuartelero"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre_cuartelero"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="sector"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="especie_plantada" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="especie_plantada"/>
+		<property name="com.jaspersoft.studio.field.label" value="especie_plantada"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="sector"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="COLUMN_17" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="id"/>
+		<property name="com.jaspersoft.studio.field.label" value="id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="sector"/>
+	</field>
+	<field name="parcela" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="parcela"/>
+		<property name="com.jaspersoft.studio.field.label" value="parcela"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="sector"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="plantas_reales" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="plantas_reales"/>
+		<property name="com.jaspersoft.studio.field.label" value="plantas_reales"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="sector"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="variedad_portainjerto" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="variedad_portainjerto"/>
+		<property name="com.jaspersoft.studio.field.label" value="variedad_portainjerto"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="sector"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="pseudonimo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="pseudonimo"/>
+		<property name="com.jaspersoft.studio.field.label" value="pseudonimo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="sector"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="sector_productivo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="sector_productivo"/>
+		<property name="com.jaspersoft.studio.field.label" value="sector_productivo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="sector"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="52" y="0" width="100" height="30" uuid="46981457-2fa9-4155-bcf1-e1e5b3032b54">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="61865062-6e32-4775-a235-863ed7ef8462"/>
+				</reportElement>
+				<text><![CDATA[id]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="212" y="0" width="100" height="30" uuid="0e396b50-00cf-4c62-bd04-ff6c8348e0d3">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="378d9723-3cac-4491-b0a1-7697b916e8ee"/>
+				</reportElement>
+				<text><![CDATA[nro_orden]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField>
+				<reportElement x="52" y="16" width="100" height="30" uuid="613fd0da-ea6b-4f3d-9886-ab1ad554eab8">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="61865062-6e32-4775-a235-863ed7ef8462"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="160" y="16" width="100" height="30" uuid="f2279c63-aa86-4511-9c80-1abf24e6fbd2">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="378d9723-3cac-4491-b0a1-7697b916e8ee"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{nro_orden}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

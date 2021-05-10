@@ -37,6 +37,11 @@
 	    	<p:panelGrid columns="4"  id="painel" style="width: 100%; margin-top: 20px"
 	    			columnClasses="rotulo, campo">
 	    		
+	    		 <p:outputLabel value="Temporada" for="temporada"/>
+		           <p:inputText id="temporada" inputStyle="text-align: right" value="#{formCab.cabApp.temporada}"  label="Temporada" >
+                	<p:keyFilter mask="num"></p:keyFilter>
+                </p:inputText>	
+	    		
 	    		<p:outputLabel value="Nro Orden" for="nro_orden"/>
 	    		<p:inputText  id="nro_orden" autocomplete="off" size="20" maxlength="20" required="true" value="#{formCab.cabApp.nroOrden}"/>
 	    		
@@ -88,13 +93,10 @@
                                               <f:attribute name="inicio" value="#{formCab.inicioComponent}" />
 		         </p:calendar>
 		         
-		         <p:outputLabel value="Temporada" for="temporada"/>
-		           <p:inputText id="temporada" inputStyle="text-align: right" value="#{formCab.cabApp.temporada}"  label="Temporada" >
-                	<p:keyFilter mask="num"></p:keyFilter>
-                </p:inputText>
+		        
 		         
 		         <p:outputLabel value="Producto" for="producto_"/>
-	               <h:panelGroup  columns="2">
+	               <h:panelGroup  columns="4">
 	              <p:selectOneMenu value="#{formCab.productoSel}"  id="producto_"  style="width:60%"  autoWidth="false" filter="true" converter="#{productoConverter}" >
 	              	    <f:selectItems value="#{formCab.productos}" var="cos" itemLabel="#{cos.producto}" itemValue="#{cos}"  />
 	              	    <p:ajax  event="change" process="@this"/>

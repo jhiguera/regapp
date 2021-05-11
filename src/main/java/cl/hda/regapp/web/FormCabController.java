@@ -198,8 +198,7 @@ public class FormCabController {
 	  flash.setKeepMessages(true);
 	  	  
      try{
-    	// ScriptEngineManager manager = new ScriptEngineManager();
-    	// ScriptEngine engine = manager.getEngineByName("js");
+    	
     	 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
  		 String usuario = authentication.getName();
     	 List<DetAplicacion> lst = new ArrayList<>();
@@ -271,7 +270,7 @@ public class FormCabController {
 public void addRow(){
 	
 	
-	
+	System.out.println("agregando fila");
 	
 	DetAplicacion det = new DetAplicacion();
 	
@@ -465,9 +464,15 @@ public void setDetSelected(DetAplicacion detSelected) {
 
 public void eliminarFila(){
     
-	logger.info("id elimina"+detAplicacion.getId());
 	
-	detAplicacionDataModel.getLstCosechaDet().remove(detAplicacion);
+	
+	logger.info("hash elimina"+detAplicacion.hashCode());
+	List<DetAplicacion> lst = detAplicacionDataModel.getLstCosechaDet();
+	
+	/** nuevo **/
+	lst.removeIf(v->v.hashCode()==detAplicacion.hashCode());
+	
+	detAplicacionDataModel = new DetAplicacionDataModel(lst);
 	if(detAplicacion.getId() != -1){
 		  lstDetAplicacionDel.add(detAplicacion);
 	}
@@ -476,11 +481,8 @@ public void eliminarFila(){
 
 public void onRowCancel(RowEditEvent event){
 	
-	logger.info("index datatable "+ detAplicacionDataModel.getRowIndex());
+	
 	detAplicacionDataModel.getLstCosechaDet().remove(detAplicacionDataModel.getRowIndex());
-		
-	
-	
 	
 	PrimeFaces.current().ajax().update("form:det1");
 

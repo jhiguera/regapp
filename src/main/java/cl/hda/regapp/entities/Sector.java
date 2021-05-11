@@ -13,13 +13,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Size;
 
 import org.hibernate.proxy.HibernateProxy;
 
 
 @Entity
-@Table(name="sector")
+@Table(name="sector",uniqueConstraints={
+		@UniqueConstraint(columnNames = {"sector_productivo" , "temporada"})})
 public class Sector implements Serializable  {
 	
 	@Id

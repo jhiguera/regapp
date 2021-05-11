@@ -27,14 +27,13 @@
 	    		<p:toolbarGroup >
 	    		    <p:commandButton value="Grabar" id="botonSalvar" action="#{formCab.salvar()}" />
 	    		    <p:commandButton process="@this"  value="Cancelar" id="botonCancelar"  action="#{formCab.cancelar()}" update="det1" />
-	    		    <p:commandButton value="Detalle"  icon="pi pi-plus" id="botonDetalleplus" process="@this"  action="#{formCab.addRow()}" oncomplete="PF('det1').addRow();"/>
 	    		</p:toolbarGroup>
 	    		<p:toolbarGroup align="right">
 	    			<p:button value="Listar" outcome="/ListarCab" />
 	    		</p:toolbarGroup>
 	    	</p:toolbar>
 	    	
-	    	<p:panelGrid columns="4"  id="painel" style="width: 100%; margin-top: 20px"
+	    	<p:panelGrid columns="4"  id="panel" style="width: 100%; margin-top: 20px"
 	    			columnClasses="rotulo, campo">
 	    		
 	    		 <p:outputLabel value="Temporada" for="temporada"/>
@@ -94,17 +93,21 @@
 		         </p:calendar>
 		         
 		        
-		         
+		     
 		         <p:outputLabel value="Producto" for="producto_"/>
 	               <h:panelGroup  columns="4">
+	              
 	              <p:selectOneMenu value="#{formCab.productoSel}"  id="producto_"  style="width:60%"  autoWidth="false" filter="true" converter="#{productoConverter}" >
 	              	    <f:selectItems value="#{formCab.productos}" var="cos" itemLabel="#{cos.producto}" itemValue="#{cos}"  />
 	              	    <p:ajax  event="change" process="@this"/>
 	              	 
 	              </p:selectOneMenu>
-	              <p:commandButton value="Detalle"  icon="pi pi-plus" id="btnAddDet" process="@this"  action="#{formCab.addRow()}" oncomplete="PF('det1').addRow();">
+	            
+	              <p:commandButton value="Agregar"  icon="pi pi-plus" id="btnAddDet" process="@this"  action="#{formCab.addRow()}" oncomplete="PF('det1').addRow();">
 	              </p:commandButton>
+	             
 	              </h:panelGroup>
+	             
 		</p:panelGrid>
 	    
 	    
@@ -193,7 +196,7 @@
 	
         </p:column>
         <p:column>
-          <p:commandButton  icon="pi pi-trash" immediate="true" process="@this" update="det1" 
+      <p:commandButton  icon="pi pi-trash" immediate="true" process="@this" update="det1" 
 		action="#{formCab.eliminarFila()}" rendered="#{det1.id eq -1}" >
 			     
 			<f:setPropertyActionListener 
@@ -212,7 +215,6 @@
 		
 	   <p:confirmDialog message="Seguro de borrar este registro?" header="Confirmacion" severity="alert" widgetVar="confirmDialog">  
                     <p:commandButton value="Si" action="#{formCab.eliminarFila()}" oncomplete="PF('confirmDialog').hide()"  immediate="true" process="@this" update="det1" >
-                   
                     </p:commandButton>  
   
                     <p:commandButton value="Not" onclick="PF('confirmDialog').hide();" type="button" />  

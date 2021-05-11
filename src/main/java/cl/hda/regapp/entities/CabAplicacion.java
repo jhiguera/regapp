@@ -241,26 +241,21 @@ public class CabAplicacion implements Serializable {
 	    return result;
 	}
 
+	
 	public void eliminarDetalle(List<DetAplicacion> det) {
-		// TODO Auto-generated method stub
 		det.forEach(x->{
 			this.detAplicacion.remove(x);
 			x.setCabAplicacion(null);
 
-
-			
 		});
 	}
 
 	
-	public void eliminarDetalle() {
-		// TODO Auto-generated method stub
-		this.detAplicacion.forEach(x->{
+	  public void eliminarDetalle() {
+		   this.detAplicacion.forEach(x->{
 			this.detAplicacion.remove(x);
 			x.setCabAplicacion(null);
 
-
-			
 		});
 		
 		

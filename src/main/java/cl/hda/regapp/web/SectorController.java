@@ -1,10 +1,14 @@
 package cl.hda.regapp.web;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +23,13 @@ import org.primefaces.event.RowEditEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.context.annotation.SessionScope;
 
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
 import com.opencsv.exceptions.CsvValidationException;
 
@@ -125,9 +134,6 @@ public class SectorController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
-       
-
     }
     
     public void copiarArchivo(String nombreArchivo, InputStream in) {
@@ -152,15 +158,84 @@ public class SectorController {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+    }
+      
+    public void importarSectores() throws CsvValidationException, IOException {
+    	
+    	System.out.println("aquiii");
+    	
+    	
+    	CSVParser parser = new CSVParserBuilder().withSeparator(';').build();
+    	   	
+    	CSVReader  reader = new CSVReaderBuilder(new InputStreamReader(new FileInputStream("c:\\tmp\\"+"sector.csv"), "ISO-8859-1"))
+    			.withCSVParser(parser)
+                .build();
+    	
+    	String[] linea;
+		String[] firstLine = reader.readNext();
+    	
+    	List<Sector> lstSector  = new ArrayList<>();
+    	
+    	/*
+    	 * 0 -> sector
+    	 * 1 -> parcela
+    	 * 2 -> pseudonimo
+    	 * 3 -> superficie
+    	 * 4 -> especie
+    	 * 5 -> variedad copa
+    	 * 6 -> variedad portainjerto
+    	 * 7 -> plantas reales
+    	 * 8 -> temporada
+	    	 */
+    	
+    	while ((linea = reader.readNext()) != null) {
+    		
+    		Float superficie;
+			
+    		if(  linea[3].length() > 0  && !linea[3].equals("-")) {
+				
+	    	      System.out.println("length linea "+linea[3].length());
+	    	      superficie = Float.parseFloat(linea[3].replace(",", "."));
+			}
+    		else
+    			superficie =null;
+    		
+			
+			Double plantasReales ;
+			
+			if(linea[7] != null && !linea[7].equals("-") && linea[7].length()>0 )
+			    plantasReales = Double.parseDouble(linea[7].replace(",",".") );
+			else
+				plantasReales = null;
+				
+			Sector s = new Sector();
+    		s.setSector(linea[0]);
+    		s.setParcela(linea[1]);
+    		s.setPseudonimo(linea[2]);
+    		s.setSuperficieReal(superficie);
+    		s.setEspecie(linea[4]);
+    		s.setVariedad(linea[5]);
+    		s.setPortainjerto(linea[6]);
+    		s.setPlantasReales(plantasReales);
+    		s.setTemporada(Integer.parseInt(linea[8]));
+    		
+    		lstSector.add(s);
+    		
+    	}
+        
+      	reader.close();
+  	
+    	try {
+    	   	sectorRepository.saveAll(lstSector);
+    	}catch(DataIntegrityViolationException  e) {
+    	    		
+    	}catch(Exception e) {}
+    	
+       	FacesMessage msg = new FacesMessage("Importacion sectores", "Se importaron los sectores correcatamene");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
 
-    	
-    	
-    }
-    
-    
-    public void importarSectores() {
-    	
-    }
+       	
+   }
     
 
 }

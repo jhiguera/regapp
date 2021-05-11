@@ -29,6 +29,7 @@ import org.primefaces.event.RowEditEvent;
 import org.primefaces.model.UploadedFile;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.context.annotation.SessionScope;
 
 import com.opencsv.CSVParser;
@@ -80,12 +81,9 @@ public class ProductoController {
 	   
 		productoDataModel = new ProductoDataModel((List<Producto>) productoRepository.findAll());
     	lstUmedidaGasto = tabCodRepository.findByCodigo("unidad_medida_gasto");
-
-		
-		
 	}
 	
-	   public void upload() {
+	 public void upload() {
 	       
 		   
 		   if (file != null) {
@@ -96,11 +94,7 @@ public class ProductoController {
 	        }else
 				   System.out.println("nulo");
 
-	    }
-
-	
-	
-	
+	 }
 
 	public void onRowCancel(RowEditEvent event){
 		
@@ -167,111 +161,28 @@ public class ProductoController {
 	 private String fileName;
 
 	 
-	  
-
-	 private String destination = "c:\\tmp\\";
-	  public void handleUpload(FileUploadEvent event) {
-	        FacesMessage msg = new FacesMessage("Success! ", event.getFile().getFileName() + " is uploaded.");
+	 public void subirArchivoProducto(FileUploadEvent eventosProd) {
+	    	
+		  
+		 
+	    	FacesMessage msg = new FacesMessage("Archivo subido correctamente ", eventosProd.getFile().getFileName() + " subido exitosamente.");
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 	        // Do what you want with the file
 	        try {
-	            copyFile("producto.csv", event.getFile().getInputstream());
+	        	
+	            copiarArchivo("producto.csv", eventosProd.getFile().getInputstream());
 	          
 	        } catch (IOException e) {
 	            e.printStackTrace();
 	        }
-	        
-	        try {
-				leerFile();
-			} catch (CsvValidationException | IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (CsvException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
 	    }
-
-	  
-	    public void leerFile() throws IOException, CsvException {
+	    
+	    public void copiarArchivo(String nombreArchivo, InputStream in) {
 	    	
-	    	
-	    	CSVParser parser = new CSVParserBuilder().withSeparator(';').build();
-	    	
-
-	    	
-	    	CSVReader  reader = new CSVReaderBuilder(new InputStreamReader(new FileInputStream(destination+"producto.csv"), "ISO-8859-1"))
-	    			.withCSVParser(parser)
-                    .build();
-
-	    	
-	    	String[] linea;
-			String[] firstLine = reader.readNext();
-	    	
-	    	List<Sector> lstSector  = new ArrayList<>();
-	    	
-	    	/*
-	    	 * 0 -> sector
-	    	 * 1 -> parcela
-	    	 * 2 -> pseudonimo
-	    	 * 3 -> superficie
-	    	 * 4 -> especie
-	    	 * 5 -> variedad copa
-	    	 * 6 -> variedad portainjerto
-	    	 * 7 -> plantas reales
-	    	 * 8 -> temporada
- 	    	 */
-	    	
-	    	while ((linea = reader.readNext()) != null) {
-	    		
-	    		Float superficie;
-				if(  linea[3].length() > 0  && !linea[3].equals("-")) {
-					
-		    	      System.out.println("length linea "+linea[3].length());
-    	    	      superficie = Float.parseFloat(linea[3].replace(",", "."));
-				}
-	    		else
-	    			superficie =null;
-	    		
-				
-				Double plantasReales ;
-				if(linea[7] != null && !linea[7].equals("-") && linea[7].length()>0 )
-				    plantasReales = Double.parseDouble(linea[7].replace(",",".") );
-				else
-					plantasReales = null;
-					
-				
-				
-	    		
-	    		Sector s = new Sector();
-	    		s.setSector(linea[0]);
-	    		s.setParcela(linea[1]);
-	    		s.setPseudonimo(linea[2]);
-	    		s.setSuperficieReal(superficie);
-	    		s.setEspecie(linea[4]);
-	    		s.setVariedad(linea[5]);
-	    		s.setPortainjerto(linea[6]);
-	    		s.setPlantasReales(plantasReales);
-	    		s.setTemporada(Integer.parseInt(linea[8]));
-	    		
-	    		lstSector.add(s);
-	    		
-	    	}
-	        
-	    	
-	    	sectorRepo.saveAll(lstSector.subList(0, 1));
-	    	
-	    	reader.close();
-	    		    	
-	    }
-	  
-	  
-	    public void copyFile(String fileName, InputStream in) {
-	        try {
+	    	try {
 
 	            // write the inputStream to a FileOutputStream
-	            OutputStream out = new FileOutputStream(new File(destination + fileName));
+	            OutputStream out = new FileOutputStream(new File("c:\\tmp\\" + nombreArchivo));
 
 	            int read = 0;
 	            byte[] bytes = new byte[1024];
@@ -284,12 +195,83 @@ public class ProductoController {
 	            out.flush();
 	            out.close();
 
-	            System.out.println("Archivo Creado");
+	            System.out.println("Archivo Creado Producto");
 	        } catch (IOException e) {
 	            System.out.println(e.getMessage());
 	        }
 	    }
-	  
+	      
+	    public void importarProductos() throws CsvValidationException, IOException {
+	    	
+	    	
+	    	
+	    	CSVParser parser = new CSVParserBuilder().withSeparator(';').build();
+	    	   	
+	    	CSVReader  reader = new CSVReaderBuilder(new InputStreamReader(new FileInputStream("c:\\tmp\\"+"producto.csv"), "ISO-8859-1"))
+	    			.withCSVParser(parser)
+	                .build();
+	    	
+	    	String[] linea;
+			String[] firstLine = reader.readNext();
+	    	
+	    	List<Producto> lstProductos  = new ArrayList<>();
+	    	
+	    	/*
+	    	 * 0 -> producto
+	    	 * 1 -> caracteristica
+	    	 * 2 -> ingrediente activo
+	    	 * 3 -> reingreso
+	    	 * 4 -> umedida
+	    	 * 5 -> color etiqueta
+	    	 * 6 -> irac
+	    	 * 7 -> mda
+	    	 * 8 -> temporada
+		    	 */
+	    	
+	    	while ((linea = reader.readNext()) != null) {
+	    		
+	    		Producto p  = new Producto();
+	    		p.setProducto(linea[0]);
+	    		p.setCaracteristicas(linea[1]);
+	    		p.setIngredienteActivo(linea[2]);
+	    		p.setReingreso(Integer.parseInt(linea[3]));
+	    		p.setuMedida(linea[4]);
+	    		p.setColorEtiqueta(linea[5]);
+	    		p.setMdaIrac(linea[6]);
+	    		p.setMdaFrac(linea[7]);
+	    		p.setTemporada(Integer.parseInt(linea[8]));
+	    		lstProductos.add(p);
+	    		
+	    	}
+	        
+	      	reader.close();
+	  	
+	    	try {
+	    	   List<Producto> lst = 	(List<Producto>) productoRepository.saveAll(lstProductos);
+	    	   List<Producto> listaProductos =   productoDataModel.getLstProducto();
+	    	   listaProductos.addAll(lst);
+	    	   
+	    	   productoDataModel  = new ProductoDataModel(listaProductos);
+	    	   
+	    	   
+	    	}catch(DataIntegrityViolationException  e) {
+	    	    		
+	    	}catch(Exception e) {}
+	    	
+	    	
+	    	/** leer productos de la bd **/
+	    	
+	    	
+	    	
+	       	FacesMessage msg = new FacesMessage("Importacion Productos", "Se importaron los Productos correcatamene");
+	        FacesContext.getCurrentInstance().addMessage(null, msg);
+	        
+	        
+	        
+
+	       	
+	   }
+	    
 	  
 	  
 

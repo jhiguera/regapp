@@ -30,8 +30,8 @@
 	    		    <p:commandButton value="Grabar" id="botonSalvar" action="#{prod.salvar()}" />
 	    		      <p:commandButton value="Agregar Producto"  icon="pi pi-plus" id="botonDetalleplus" update="prod"
 	    		         process="@this"  action="#{prod.addRow()}" oncomplete="PF('prod').paginator.setPage(PF('prod').paginator.cfg.pageCount - 1);"  />
-	    	 		 
-	    		</p:toolbarGroup>
+	    	 		 <p:commandButton value="Importar" type="button" icon="pi pi-external-link" onclick="PF('dlgImportar').show()"/>
+			 	</p:toolbarGroup>
 	    		
 	    	</p:toolbar>
           <br/>
@@ -103,9 +103,7 @@
              <f:facet name="input"><p:inputText required="true" inputStyle="text-align: right" value="#{p.colorEtiqueta}" style="width:100%" label="Color Etiqueta"/></f:facet>
             </p:cellEditor>
            </p:column>
-        
-        
-        
+         
        <p:column headerText="Mda Frac">
            <p:cellEditor>
             <f:facet name="output"><h:outputText value="#{p.mdaFrac}" /></f:facet>
@@ -126,44 +124,34 @@
         </p:selectBooleanCheckbox></f:facet>
             </p:cellEditor>
         </p:column>
-        
-        
-        
+            
         <p:column style="width:32px">
              <p:rowEditor>
               </p:rowEditor>
         </p:column>
-        
-        
-        
-        
+      
      </p:dataTable> 
      
-        <p:fileUpload update="content" auto="true" style="width:500px;" 
-                      fileUploadListener="#{prod.handleUpload}"/>
-
-        <p:panel id="content" style="border:none;">
-            <p:outputPanel rendered="#{prod.fileName ne null}">
-                <h4>File name:</h4>
-                #{prod.fileName}
-                <h4>File content:</h4>
-                #{prod.fileContent}
-            </p:outputPanel>
-        </p:panel>
-        
+      <p:dialog header="Importa Productos" widgetVar="dlgImportar" minHeight="500" width="700" showEffect="fade">
+      <p class="p-m-0">
+       <p:fileUpload style="width:100%" cancelLabel="Cancelar" label="Seleccionar" uploadLabel="Subir Archivo" 
+       mode="advanced" 
+                      multiple="false"
+                      sizeLimit="102400" allowTypes="/(\.|\/)(csv)$/"
+                      invalidSizeMessage="Maximum file size allowed is 100 KB"
+                      invalidFileMessage="only csv is allowed"
+       fileUploadListener="#{prod.subirArchivoProducto}"/>
+    
+    
+    
+    </p>
+    <f:facet name="footer">
+        <p:commandButton type="button" value="Cancelar" styleClass="ui-button-flat p-mr-2" style="width: 6rem" />
+        <p:commandButton value="Importar" style="width: 5rem" action="#{prod.importarProductos()}" update="prod" />
+    </f:facet>
+    
+    </p:dialog>
      
    </h:form>
-   
-   <div class="card">
-    
-     <h:form>
-           </h:form>
-    
-    
-    
-</div>
-   
-   
-   
-  </ui:define>
+ </ui:define>
 </ui:composition>

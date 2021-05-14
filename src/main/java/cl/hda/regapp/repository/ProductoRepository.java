@@ -11,5 +11,6 @@ import cl.hda.regapp.entities.Producto;
 public interface ProductoRepository extends CrudRepository<Producto, Long> {
 	
 	List<Producto> findByVigente(Boolean vigente);
+	List<Producto> findByTemporada(Integer temporada);
 
 }

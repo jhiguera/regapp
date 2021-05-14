@@ -38,6 +38,7 @@ import javax.sql.DataSource;
 
 import org.primefaces.PrimeFaces;
 import org.primefaces.component.datatable.DataTable;
+import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.event.RowEditEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,7 +115,7 @@ public class FormCabController {
   
   DetAplicacion detAplicacion;
   
-  
+  SelectOneMenu temporadaComponent;
   UIComponent inicioComponent;
   UIComponent productoComponent;
   
@@ -129,10 +130,12 @@ public class FormCabController {
   List<TabCod> lstMaquinas  = new ArrayList<>();
   List<TabCod> lstUmedida   = new ArrayList<>();
   List<TabCod> lstUmedidaGasto = new ArrayList<>();
+  List<TabCod> lstTemporadas   = new ArrayList<>();
   List<Conversion> lstConversion = new ArrayList<>();
   DetAplicacionDataModel  detAplicacionDataModel = new DetAplicacionDataModel(new ArrayList<DetAplicacion>());
   
   Producto productoSel;
+  Integer temporadaSel;
   
   
   DetAplicacion detSelected;
@@ -145,6 +148,21 @@ public class FormCabController {
   
   @PersistenceContext
   private EntityManager em;
+  
+  
+  public void cambioTemporada() {
+	  
+	Integer temporada = cabApp.getTemporada() ;
+	
+	sectores = sectorRepository.findByTemporada(temporada);
+	productos = productoRepository.findByTemporada(temporada);
+	
+	 
+	
+	  
+	  
+  }
+  
   
   
   public String cancelar(){
@@ -508,6 +526,7 @@ public void cargarParametros(){
 	 lstObjetivos = tabCodRepository.findByCodigo("objetivo_aplicacion");
 	 lstMetodos   = tabCodRepository.findByCodigo("metodo_aplicacion");
 	 lstMaquinas  = tabCodRepository.findByCodigo("maquinas");
+	 lstTemporadas = tabCodRepository.findByCodigo("temporada");
 	 
 	 TabCod  metodo  = lstMetodos.get(0);
 	 lstUmedida   = tabCodRepository.findByCodigo("unidad_medida");
@@ -546,6 +565,40 @@ public Producto getProductoSel() {
 
 public void setProductoSel(Producto productoSel) {
 	this.productoSel = productoSel;
+}
+
+
+public List<TabCod> getLstTemporadas() {
+	return lstTemporadas;
+}
+
+
+public void setLstTemporadas(List<TabCod> lstTemporadas) {
+	this.lstTemporadas = lstTemporadas;
+}
+
+
+
+public Integer getTemporadaSel() {
+	return temporadaSel;
+}
+
+
+
+public void setTemporadaSel(Integer temporadaSel) {
+	this.temporadaSel = temporadaSel;
+}
+
+
+
+public SelectOneMenu getTemporadaComponent() {
+	return temporadaComponent;
+}
+
+
+
+public void setTemporadaComponent(SelectOneMenu temporadaComponent) {
+	this.temporadaComponent = temporadaComponent;
 }
 
  
